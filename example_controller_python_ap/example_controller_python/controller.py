@@ -201,6 +201,8 @@ class DemoController(Node):
                 takeoffCommand.altitude = float(self.flight_height)
                 self.command_rate_limiter.call(lambda: self.takeoff_client.call_async(takeoffCommand))
                 
+                setpoint_msg = None
+                
                 if self.vehicle_position.pose.position.z > self.flight_height * 0.95:
                     self.logger.info("Takeoff Complete, Going to Flight")
                     self.state = 'Flight'
