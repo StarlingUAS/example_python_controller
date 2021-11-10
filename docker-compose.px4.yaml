@@ -1,40 +1,14 @@
 version: '3'
 
 services:
-  simhost:
-    image: uobflightlabstarling/starling-sim-iris:${STARLING_RELEASE:-latest}
-    environment:
-      - PX4_SIM_HOST=sitl
-    ports:
-      - "8080:8080"
-
-  sitl:
-    image: uobflightlabstarling/starling-sim-px4:${STARLING_RELEASE:-latest}
-    environment:
-      - PX4_SIM_HOST=simhost
-      - PX4_OFFBOARD_HOST=mavros
-  
-  mavros:
-    image: uobflightlabstarling/starling-mavros:${STARLING_RELEASE:-nightly}
-    command: ros2 launch launch/mavros_bridge.launch.xml
-    environment:
-      - "MAVROS_TGT_SYSTEM=1"
-      - "MAVROS_FCU_URL=tcp://sitl:5760"
-      - "MAVROS_GCS_URL=tcp-l://:5761"
-    ports:
-      - "5761:5761"
 
   controller:
-    image: uobflightlabstarling/example_controller_python_px4:latest
+    build: example_controller_python_px4/
+    network_mode: ${STARLING_NETWORK_MODE:-host}
     depends_on:
       - mavros
 
-  ui:
-    image: mickeyli789/starling-ui-dashly:latest
-    ports:
-      - "3000:3000"
-
-  rosbridge-suite:
-    image: uobflightlabstarling/rosbridge-suite:${STARLING_RELEASE:-latest}
-    ports:
-      - "9090:9090"
+networks:
+  default:
+    external: true
+    name: ${STARLING_NETWORK:-projectstarling_default}
