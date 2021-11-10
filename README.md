@@ -1,6 +1,6 @@
 # Useful and Example Controllers developed for general starling usage
 
-This folder contains a number of general controllers for general usage of the starling system.
+This folder contains a number of simple example general controllers for general usage of the starling system.
 
 ## Building and Installation
 
@@ -60,16 +60,25 @@ Where `<Name of compose network>` is replaced by the network name created by the
 
 This folder can be built locally by running `make all` from this folder. Each element can also be built separately by invoking `make <controller-name>`.
 
+These are then available on the system under the tag `uobflightlabstarling/example_controller_python_ap` (or `_px4`) fo general running with `docker run`.
+
 ## Example Python Controller
 
-This is an example of a controller for the system written in Python with ROS2. It has been packaged up with a Dockerfile and an example kubernetes deployment file. The controller itself directly talks to mavros and tells the drone to lift off, trace a semi circle and land.
+This project contains an example of a controller for the system written in Python with ROS2. It has been packaged up with a Dockerfile and an example kubernetes deployment file. The controller itself directly talks to mavros and tells the drone to lift off, trace a semi circle and land.
 
-## Starling Simple Offboard
+For greater details on how it works, refer to [README_controller.md](README_controller.md).
+
+## Examples of Controllers For Use in Starling
+### Example Python Controller
+
+This is the controller within this repository
+
+### Starling Simple Offboard
 
 This is an example of an onboard or offboard controller which can be used to control a single drone. It is based on the original Clover simple offboard, but also includes a trajectory follower module. This controller can be run to provide a higher level control of a real or simulated drone.
 
 > **Note** If running in the flight arena, this controller is already running on the Coex Clover drones
 
-## Starling Allocator
+### Starling Allocator
 
 This is an example of a trajectory allocator node which attempt to smartly allocate trajectories to drones which can run them.
