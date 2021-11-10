@@ -1,8 +1,0 @@
-version: '3'
-
-services:
-  controller:
-    build: example_controller_python_ap/
-    # image: uobflightlabstarling/example_controller_python_ap:latest
-    network_mode: host
-    command: ["ros2", "launch", "example_controller_python", "fenswood_example.launch.py"]
