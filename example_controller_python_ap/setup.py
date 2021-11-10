@@ -21,7 +21,8 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "controller = example_controller_python.controller:main"
+            "controller = example_controller_python.controller:main",
+            "fenswood = example_controller_python.fenswood_controller:main"
         ]
     }
 )
