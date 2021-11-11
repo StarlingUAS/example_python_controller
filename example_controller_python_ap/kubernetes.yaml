@@ -47,7 +47,7 @@ spec:
   shareProcessNamespace: true
   containers: # Add your containers here ot the pod
   - name: s-example-controller-python # Name of container, must be unique.
-    image: uobflightlabstarling/example_controller_python # Name of the docker image of your container
+    image: uobflightlabstarling/example_controller_python_ap # Name of the docker image of your container
     imagePullPolicy: Always # Use Always to ensure it is always pulling the most recent version of a repository container
     # env:
     # - name: TARGET_NAME
