@@ -2,35 +2,7 @@
 
 This is a very basic "controller" written in Python, using ROS2 and MAVROS to control a PX4-based vehicle. It commands all current vehicles to fly in a 1m radius circle at a height of 2.5m.
 
-It begins sending offboard setpoints, sets the mode to `OFFBOARD`, arms the vehicle, and finally begins moving the setpoint around the sky.
-
-## Contents
-[TOC]
-
-## Usage
-
-### Docker
-To run the controller, it needs to be connected to the network that the other ROS nodes exist in.
-
-For example:
-```bash
-docker run -it --network projectstarling_default example_controller_python
-```
-where `projectstarling_default` is the name of the default network created by the example `docker-compose.yaml` in the root directory.
-
-Replace `example_controller_python` with `uobflightlabstarling/example_controller_python` if you have not locally built the controller. 
-
-> **Note:** Due to the way rclpy works, this container can not be killed gracefully unless
-using the `-it` flags for docker run. See [this issue](https://github.com/ros2/rclpy/issues/527).
-
-### Kubernetes
-
-To run the controller in kubernetes, k3s must be up and running, then simply apply the k8 deployment script
-```bash
-kubectl apply -f example_controller_python/k8.example_controller_python.amd64.yaml
-```
-
-This will firstly run the local `uobflightlabstarling/example_controller_python` if one exists, otherwise it will pull from docker hub. 
+It begins sending offboard setpoints, sets the mode to `OFFBOARD` for px4 or `GUIDED` for ardupilot, arms the vehicle, takes off, and finally begins moving the setpoint around the sky.
 
 ## Details
 
@@ -39,13 +11,15 @@ This will firstly run the local `uobflightlabstarling/example_controller_python`
  1. #### Initialisation
     
     In the initialisation phase, the controller sends a stream of setpoints to
-    the vehicle while it waits for a valid position. This is needed as PX4 will
-    not switch into `OFFBOARD` mode without a valid setpoint stream. In this
+    the vehicle while it waits for a valid position. This is needed in PX4, as it will
+    not switch into `OFFBOARD` mode without a valid setpoint stream. 
+    Ardupilot also needs this stream to set its home position before flight. 
+    In this
     phase, the controller also initialises the initial position of the vehicle.
 
  1. #### Mode switching
  
-    PX4 follows various types of setpoints when in `OFFBOARD` mode. The
+    PX4 follows various types of setpoints when in `OFFBOARD` mode. Similarly, Ardupilot follows setpoints whilst in `GUIDED` mode. The
     controller uses a ROS service to command the vehicle to switch into this
     mode. It will retry the mode switch once per second until it succeeds.
     Once this is complete it will wait for a ros message from `/mission_start` before continuing on to ARM. 
@@ -60,9 +34,10 @@ This will firstly run the local `uobflightlabstarling/example_controller_python`
 
  1. #### Takeoff
 
-    Once the vehicle is armed and in `OFFBOARD` mode, the flight can begin. The
-    controller uses the initial position it recorded earlier and begins to
-    generate a setpoint that rises above this. Once the setpoint is at the
+    Once the vehicle is armed and in `OFFBOARD`/`GUIDED` mode, the flight can begin. 
+    For PX4, the controller uses the initial position it recorded earlier and begins to
+    generate a setpoint that rises above this. 
+    For Ardupilot, a specific takeoff command is given. Once the setpoint is at the
     desired takeoff altitude, the controller waits for the actual vehicle
     position to reach some predetermined value before it considers the takeoff
     to be complete.
@@ -125,8 +100,7 @@ correct places.
 
 `package.xml` provides ROS with information about the package. You should list
 any dependencies your controller has here. For almost all of the controllers,
-you will want to list `mavros_msgs` as a dependency. However, note that this
-package is not yet available from the package managers for ROS2. Luckily
-we prepared an image for you earlier with it already installed. A lot of
+you will want to list `mavros_msgs` as a dependency. This is already installed from the package manager into 
+the base controller image. A lot of
 information from here then has to be duplicated into the `setup.py` script. If
 only there was a way to automate the building of build scripts...
