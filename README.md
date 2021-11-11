@@ -30,31 +30,35 @@ docker-compose -f docker-compose.px4.yaml up --build
 ```
 #### Running and Networking
 
-Instructions for networking differs on Windows and Linux, as well as which simulator/sitl/mavros scenario you have run. 
+Instructions for networking differs on Windows and Linux, as well as which simulator/sitl/mavros scenario you have run. Each might require setting of some environment variables beforehand.
 
-1. **Linux** - No modifications are required to run the docker-compose files, the default settings in the compose files will do the job. Run as above! (This is because linux compose files have been set to use host networking).
-2. **Windows** - A number of environment variables will need to be set before running the command:
+1. **Windows** - By default the compose files will attempt to connect to a custom Docker Network. The network name is created by the simulator compose file which must be run beforehand. Unless specifically changed, this will default to: `<folder_which_contains_compose_file>_default`, i.e:
+
+- Projectstarling (default): `projectstarling_default`
+- FenswoodScenario: `fenswoodscenario_default`
+- Mumuration: `px4_default` or `ap_default`
+
+If no `STARLING_NETWORK` environment variable is specified, it will default to `projectstarling_default`
 
 **Using WSL2** (all one command):
 ```bash
-STARLING_NETWORK='<Name of compose network>';STARLING_NETWORK_MODE='bridge'; docker-compose -f docker-compose.ap.yaml up
+STARLING_NETWORK='<Name of compose network>'; docker-compose -f docker-compose.ap.yaml up
 ```
 
 **Using Powershell**:
 ```ps1
-$env:STARLING_NETWORK = '<Name of compose network>'; $env:STARLING_NETWORK_MODE = 'bridge'; 
+$env:STARLING_NETWORK = '<Name of compose network>'; 
 docker-compose -f docker-compose.ap.yaml up
 
 # Then when you are finished using these environment variables
 Remove-Item Env:\STARLING_NETWORK
-Remove-Item Env:\STARLING_NETWORK_MODE
 ```
 
-Where `<Name of compose network>` is replaced by the network name created by the simulator compose file. Unless specifically changed, this will default to: `<folder_which_contains_compose_file>_default`, i.e:
+2. **Linux** - If running with the `linux` variant of the simulator compose files, you will need to specify that the environment variable `STARLING_NETWORK_MODE='host'`:
 
-- Projectstarling: `projectstarling_default`
-- FenswoodScenario: `fenswoodscenario_default`
-- Mumuration: `px4_default` or `ap_default`
+```bash
+STARLING_NETWORK_MODE='host'; docker-compose -f docker-compose.ap.yaml up
+```
 
 ### Through Makefile
 

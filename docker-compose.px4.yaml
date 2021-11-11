@@ -4,7 +4,7 @@ services:
 
   controller:
     build: example_controller_python_px4/
-    network_mode: ${STARLING_NETWORK_MODE:-host}
+    network_mode: ${STARLING_NETWORK_MODE:-bridge}
     depends_on:
       - mavros
 
