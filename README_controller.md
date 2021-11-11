@@ -34,9 +34,10 @@ It begins sending offboard setpoints, sets the mode to `OFFBOARD` for px4 or `GU
 
  1. #### Takeoff
 
-    Once the vehicle is armed and in `OFFBOARD`/`GUIDED` mode, the flight can begin. The
-    controller uses the initial position it recorded earlier and begins to
-    generate a setpoint that rises above this. Once the setpoint is at the
+    Once the vehicle is armed and in `OFFBOARD`/`GUIDED` mode, the flight can begin. 
+    For PX4, the controller uses the initial position it recorded earlier and begins to
+    generate a setpoint that rises above this. 
+    For Ardupilot, a specific takeoff command is given. Once the setpoint is at the
     desired takeoff altitude, the controller waits for the actual vehicle
     position to reach some predetermined value before it considers the takeoff
     to be complete.
@@ -99,8 +100,7 @@ correct places.
 
 `package.xml` provides ROS with information about the package. You should list
 any dependencies your controller has here. For almost all of the controllers,
-you will want to list `mavros_msgs` as a dependency. However, note that this
-package is not yet available from the package managers for ROS2. Luckily
-we prepared an image for you earlier with it already installed. A lot of
+you will want to list `mavros_msgs` as a dependency. This is already installed from the package manager into 
+the base controller image. A lot of
 information from here then has to be duplicated into the `setup.py` script. If
 only there was a way to automate the building of build scripts...
