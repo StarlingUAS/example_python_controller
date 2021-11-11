@@ -66,6 +66,14 @@ This folder can be built locally by running `make all` from this folder. Each el
 
 These are then available on the system under the tag `uobflightlabstarling/example_controller_python_ap` (or `_px4`) fo general running with `docker run`.
 
+### Kubernetes
+
+To run the controller in kubernetes, k3s must be up and running and the images built via the Makefile. Then simply apply the k8 deployment script in the px4/ap folders, e.g.
+```
+kubectl apply -f example_controller_python_ap/kubernetes.yaml
+kubectl apply -f example_controller_python_px4/kubernetes.yaml
+```
+This will run the local uobflightlabstarling/example_controller_python_ap/_px4 if it has successfuly built. The image will need to be pushed to a repository for use on a different machine in the cluster
 ## Example Python Controller
 
 This project contains an example of a controller for the system written in Python with ROS2. It has been packaged up with a Dockerfile and an example kubernetes deployment file. The controller itself directly talks to mavros and tells the drone to lift off, trace a semi circle and land.
