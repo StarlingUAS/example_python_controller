@@ -74,6 +74,22 @@ kubectl apply -f example_controller_python_ap/kubernetes.yaml
 kubectl apply -f example_controller_python_px4/kubernetes.yaml
 ```
 This will run the local uobflightlabstarling/example_controller_python_ap/_px4 if it has successfuly built. The image will need to be pushed to a repository for use on a different machine in the cluster
+
+## Fenswood Scenario Example Controller
+
+An example controller is provided which attempts to solve the Fenswood Scenario target landing problem in [FenswoodScenario](https://github.com/StarlingUAS/FenswoodScenario). 
+
+To run the fenswood ardupilot example controller, first start up the fenswood scenario simulation compose file for your particular operating system. 
+
+Then, the fenswood compose file will start the example fenswood controller. 
+```bash
+docker-compose -f docker-compose.fenswood.ap.yaml up
+```
+
+As described above, if you are running on linux you may need to specify `STARLING_NETWORK_MODE='host'` before running `up`. 
+
+The controller simply follows a trajectory, specified by a set of hardcoded points within the controller. 
+
 ## Example Python Controller
 
 This project contains an example of a controller for the system written in Python with ROS2. It has been packaged up with a Dockerfile and an example kubernetes deployment file. The controller itself directly talks to mavros and tells the drone to lift off, trace a semi circle and land.

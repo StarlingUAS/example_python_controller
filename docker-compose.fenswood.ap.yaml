@@ -3,7 +3,7 @@ version: '3'
 services:
   controller:
     build: example_controller_python_ap/
-    network_mode: ${STARLING_NETWORK_MODE:-host}
+    network_mode: ${STARLING_NETWORK_MODE:-bridge}
     command: ["ros2", "launch", "example_controller_python", "fenswood_example.launch.py"]
 
 
