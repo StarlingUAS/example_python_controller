@@ -48,6 +48,8 @@ It begins sending offboard setpoints, sets the mode to `OFFBOARD` for px4 or `GU
     vehicle. In this case, these follow a circle around the local coordinate
     system origin.
 
+    In the 'fenswood' scenario runner, during the flight, the controller attempts to follow a hard coded trajectory. It performs linear interpolation between the trajectory points based on the times at which the drone should arrive at each trajectory point. Therefore at each controller cycle, it will send a setpoint for the next interpolated location. Once the arrival time for the current target point is reached, the controller interpolates to the next point and so on. 
+
 > **Note:** If a message is sent on the `/emergency_stop` topic this controller will send the PX4 e-STOP command. This stops the motors of the drones. 
 
 ### Multiple Drones
