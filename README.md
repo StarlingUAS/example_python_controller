@@ -8,9 +8,9 @@ This folder contains a number of simple example general controllers for general 
 
 #### Building
 
-The examples can be built and run via `docker-compose`. 
+The examples can be built and run via `docker-compose`.
 
-First, start up one of the docker-compose simulator stacks in ProjectStarling (i.e. [docker-compose.yml](https://github.com/StarlingUAS/ProjectStarling/blob/master/docker-compose.yml)), [Murmuration](https://github.com/StarlingUAS/Murmuration) or [FenswoodScenario](https://github.com/StarlingUAS/FenswoodScenario). 
+First, start up one of the docker-compose simulator stacks in ProjectStarling (i.e. [docker-compose.yml](https://github.com/StarlingUAS/ProjectStarling/blob/master/docker-compose.yml)), [Murmuration](https://github.com/StarlingUAS/Murmuration) or [FenswoodScenario](https://github.com/StarlingUAS/FenswoodScenario).
 ```bash
 docker-compose -f <simulator/sitl/mavros compose file> up
 ```
@@ -23,7 +23,7 @@ docker-compose -f docker-compose.px4.yaml up
 docker-compose -f docker-compose.ap.yaml up
 ```
 
-This command will both build and run the local files (the compose file uses the 'build' entry to specify the location of building). If you make any local changes to the controller, the controller can be rebuilt by using the `--build` flag, e.g. 
+This command will both build and run the local files (the compose file uses the 'build' entry to specify the location of building). If you make any local changes to the controller, the controller can be rebuilt by using the `--build` flag, e.g.
 
 ```bash
 docker-compose -f docker-compose.px4.yaml up --build
@@ -47,17 +47,17 @@ STARLING_NETWORK='<Name of compose network>'; docker-compose -f docker-compose.a
 
 **Using Powershell**:
 ```ps1
-$env:STARLING_NETWORK = '<Name of compose network>'; 
+$env:STARLING_NETWORK = '<Name of compose network>';
 docker-compose -f docker-compose.ap.yaml up
 
 # Then when you are finished using these environment variables
 Remove-Item Env:\STARLING_NETWORK
 ```
 
-2. **Linux** - If running with the `linux` variant of the simulator compose files, you will need to specify that the environment variable `STARLING_NETWORK_MODE='host'`:
+2. **Linux** - If running with the `linux` variant of the simulator compose files, you will not need to make any changes. By default the file already uses `host` networking. Whilst this fails on windows, therefore dropping to use the default network, on linux this succeeds.
 
 ```bash
-STARLING_NETWORK_MODE='host'; docker-compose -f docker-compose.ap.yaml up
+docker-compose -f docker-compose.ap.yaml up
 ```
 
 ### Through Makefile
@@ -77,18 +77,16 @@ This will run the local uobflightlabstarling/example_controller_python_ap/_px4 i
 
 ## Fenswood Scenario Example Controller
 
-An example controller is provided which attempts to solve the Fenswood Scenario target landing problem in [FenswoodScenario](https://github.com/StarlingUAS/FenswoodScenario). 
+An example controller is provided which attempts to solve the Fenswood Scenario target landing problem in [FenswoodScenario](https://github.com/StarlingUAS/FenswoodScenario).
 
-To run the fenswood ardupilot example controller, first start up the fenswood scenario simulation compose file for your particular operating system. 
+To run the fenswood ardupilot example controller, first start up the fenswood scenario simulation compose file for your particular operating system.
 
-Then, the fenswood compose file will start the example fenswood controller. 
+Then, the fenswood compose file will start the example fenswood controller.
 ```bash
 docker-compose -f docker-compose.fenswood.ap.yaml up
 ```
 
-As described above, if you are running on linux you may need to specify `STARLING_NETWORK_MODE='host'` before running `up`. 
-
-The controller simply follows a trajectory, specified by a set of hardcoded points within the controller. 
+The controller simply follows a trajectory, specified by a set of hardcoded points within the controller.
 
 ## Example Python Controller
 
