@@ -68,6 +68,12 @@ class DemoController(Node):
             mavros_msgs.srv.SetMode,
             f'mavros/set_mode')
         
+        self.stream_rate_limiter = RateLimiter(1,self.get_clock())
+        self.stream_rate_client = self.create_client(
+            mavros_msgs.srv.StreamRate,
+            f'mavros/set_stream_rate')
+        
+
         self.arm_rate_limiter = RateLimiter(1,self.get_clock())
         self.arming_client = self.create_client(
             mavros_msgs.srv.CommandBool,
@@ -93,7 +99,7 @@ class DemoController(Node):
         timer_period = 0.02
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
-        self.vehicle_position = PoseStamped()
+        self.vehicle_position = None
         self.vehicle_state = mavros_msgs.msg.State()
 
         self.initial_position = None
@@ -132,6 +138,14 @@ class DemoController(Node):
             self.state = 'DEAD'
 
         if self.state == 'Init':
+            if self.initial_position==None and self.vehicle_position == None: # Request vehicle position from GCS
+                commandCall = mavros_msgs.srv.StreamRate.Request()
+                commandCall.stream_id = 6 # Request position streaming
+                commandCall.message_rate = 20 # Request at 20hz
+                commandCall.on_off = True
+                self.stream_rate_limiter.call(lambda: self.stream_rate_client.call_async(commandCall))
+                self.logger.info("Sent Set Message Interval Request (Ardupilot)")
+
             if self.initial_position == None and self.vehicle_position != None:
                 self.initial_position = copy.deepcopy(self.vehicle_position)
                 self.logger.info("Got initial position: ({},{},{})".format(

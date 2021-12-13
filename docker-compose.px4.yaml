@@ -3,8 +3,8 @@ version: '3'
 services:
 
   controller:
-    build: example_controller_python_px4/
-    network_mode: ${STARLING_NETWORK_MODE:-bridge}
+    build: ./example_controller_python_px4/
+    network_mode: host
 
 networks:
   default:
